@@ -1,5 +1,6 @@
 package com.ed2.aleja.proyectochatcliente;
 
+import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -151,6 +152,22 @@ public class MainActivity extends AppCompatActivity {
         Recuperación de la contraseña y registro
          */
 
+        TextView recuperarContraseña = (TextView) findViewById(R.id.olvidoContraseña_login);
+        recuperarContraseña.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent Recuperar = new Intent(getApplicationContext(), RecuperarActivity.class);
+                startActivity(Recuperar);
+            }
+        });
 
+        Button registrarse = (Button) findViewById(R.id.registrarse);
+        registrarse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent Registro = new Intent(getApplicationContext(), RegistroActivity.class);
+                startActivity(Registro);
+            }
+        });
     }
 }
