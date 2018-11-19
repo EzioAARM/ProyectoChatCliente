@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegistroActivity">
-
-
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ContinuarRegistroActivity">
 
     <RelativeLayout
         android:layout_margin="25dp"
@@ -14,18 +11,19 @@
         android:layout_height="fill_parent">
 
         <TextView
-            android:id="@+id/lbl_registro"
+            android:id="@+id/lbl_registro_continuacion"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             style="@style/AppTheme.H4"
-            android:text="Registro"/>
+            android:text="Hola"/>
+
         <TextView
-            android:id="@+id/lbl_info_registro"
-            android:layout_below="@id/lbl_registro"
+            android:id="@+id/lbl_info_registro_continuacion"
+            android:layout_below="@id/lbl_registro_continuacion"
             android:layout_width="fill_parent"
             style="@style/AppTheme.Caption"
             android:layout_height="wrap_content"
-            android:text="Llene los datos que se le piden, todos son obligatorios"/>
+            android:text="Solo llena estos campos y terminaremos"/>
 
         <RelativeLayout
             android:layout_centerVertical="true"
@@ -33,77 +31,78 @@
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/campo_email_registro"
+                android:id="@+id/campo_nombre_registro"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
                 android:layout_marginTop="15dp">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/email_registro"
+                    android:id="@+id/nombre_registro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Correo electrónico"
+                    android:hint="Nombre"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/campo_username_registro"
+                android:id="@+id/campo_apellido_registro"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/campo_email_registro"
+                android:layout_below="@+id/campo_nombre_registro"
                 android:layout_marginTop="15dp">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/username_registro"
+                    android:id="@+id/apellido_registro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Nombre de usuario"
+                    android:hint="Apellido"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/campo_password_registro"
+                android:id="@+id/campo_telefono_registro"
                 android:layout_width="fill_parent"
+                android:layout_below="@+id/campo_apellido_registro"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/campo_username_registro"
                 android:layout_marginTop="15dp">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/password_registro"
+                    android:id="@+id/telefono_registro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Contraseña"
-                    android:inputType="textPassword"
-                    android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/campo_confirmar_password_registro"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/campo_password_registro"
-                android:layout_marginTop="15dp">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/confirmar_password_registro"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Confirme la contraseña"
-                    android:inputType="textPassword"
+                    android:hint="Número de teléfono"
                     android:imeOptions="actionDone"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/campo_fecha_registro"
+                android:layout_width="fill_parent"
+                android:layout_below="@+id/campo_telefono_registro"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/fecha_registro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Fecha de nacimiento"
+                    android:imeOptions="actionDone"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:inputType="date"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
         </RelativeLayout>
 
         <Button
-            android:id="@+id/cancelar_registro"
+            android:id="@+id/anterior_registro"
             style="@style/AppTheme.Button"
             android:layout_width="wrap_content"
             android:layout_marginTop="15dp"
@@ -111,10 +110,10 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:background="@color/colorCancel"
-            android:text="Cancelar" />
+            android:text="Anterior" />
 
         <Button
-            android:id="@+id/continuar_registro"
+            android:id="@+id/terminar_registro"
             style="@style/AppTheme.Button"
             android:layout_width="wrap_content"
             android:layout_marginTop="15dp"
@@ -122,9 +121,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:background="@color/colorPrimaryDark"
-            android:text="Siguiente" />
+            android:text="Terminar" />
 
     </RelativeLayout>
-
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
