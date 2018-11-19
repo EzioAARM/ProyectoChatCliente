@@ -102,20 +102,9 @@ public class MainActivity extends AppCompatActivity {
         logear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (usernameInputLayout.getEditText().getText().toString().equals("")){
-                    usernameInputLayout.setErrorEnabled(true);
-                    usernameInputLayout.setError("Debe ingresar un nombre de usuario");
-                } else {
-                    usernameInputLayout.setErrorEnabled(false);
-                    usernameInputLayout.setError(null);
-                }
-                if (passwordInputLayout.getEditText().getText().toString().equals("")) {
-                    passwordInputLayout.setErrorEnabled(true);
-                    passwordInputLayout.setError("Debe ingresar una contraseña");
-                } else {
-                    passwordInputLayout.setErrorEnabled(false);
-                    passwordInputLayout.setError(null);
-                }
+                Intent PaginaPrincipal = new Intent(getApplicationContext(), PrincipalActivity.class);
+                startActivity(PaginaPrincipal);
+                finish();
             }
         });
 
@@ -127,16 +116,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                passwordInputLayout.setError(null);
-                passwordInputLayout.setErrorEnabled(false);
+                verificarPassword();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (passwordLogin.getText().toString().equals("")){
-                    passwordInputLayout.setErrorEnabled(true);
-                    passwordInputLayout.setError("Debe ingresar un nombre de usuario");
-                }
+
             }
         });
 
@@ -148,16 +133,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                usernameInputLayout.setError(null);
-                usernameInputLayout.setErrorEnabled(false);
+                verificarUsername();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (usernameLogin.getText().toString().equals("")){
-                    usernameInputLayout.setErrorEnabled(true);
-                    usernameInputLayout.setError("Debe ingresar un nombre de usuario");
-                }
+
             }
         });
 
@@ -185,4 +166,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private boolean verificarDatos() {
+        return (verificarPassword() && verificarUsername());
+    }
+
+    private boolean verificarPassword() {
+        if (passwordInputLayout.getEditText().getText().toString().equals("")) {
+            passwordInputLayout.setErrorEnabled(true);
+            passwordInputLayout.setError("Debe ingresar una contraseña");
+            return false;
+        } else {
+            passwordInputLayout.setErrorEnabled(false);
+            passwordInputLayout.setError(null);
+            return true;
+        }
+    }
+
+    private boolean verificarUsername() {
+        if (usernameInputLayout.getEditText().getText().toString().equals("")){
+            usernameInputLayout.setErrorEnabled(true);
+            usernameInputLayout.setError("Debe ingresar un nombre de usuario");
+            return false;
+        } else {
+            usernameInputLayout.setErrorEnabled(false);
+            usernameInputLayout.setError(null);
+            return true;
+        }
+    }
+
 }

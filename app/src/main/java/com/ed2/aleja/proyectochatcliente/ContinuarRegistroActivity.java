@@ -110,10 +110,13 @@ public class ContinuarRegistroActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 if (response.isSuccessful()){
-                                    Toast.makeText(getApplicationContext(), "Se registró con éxito", Toast.LENGTH_LONG).show();
-                                    Intent Login = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(Login);
-                                    finish();
+                                    Toast.makeText(getApplicationContext(), response.body().toString(), Toast.LENGTH_LONG).show();
+                                    /*if (response.body().equals("")) {
+                                        Toast.makeText(getApplicationContext(), "Se registró con éxito", Toast.LENGTH_LONG).show();
+                                        Intent Login = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(Login);
+                                        finish();
+                                    }*/
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Hubo un error realizando su registro", Toast.LENGTH_LONG).show();
                                 }

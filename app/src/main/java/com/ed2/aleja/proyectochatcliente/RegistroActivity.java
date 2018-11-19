@@ -46,26 +46,6 @@ public class RegistroActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (validarCampos()){
-
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(baseURL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-                    IHttpRequests registrarRecurso = retrofit.create(IHttpRequests.class);
-                    Call<ResponseBody> llamada = registrarRecurso.buscarExacto(usernameEditText.getText().toString());
-                    llamada.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            if (response.isSuccessful()){
-                                Toast.makeText(getApplicationContext(), "Se registró con éxito", Toast.LENGTH_LONG).show();
-                                Intent Login = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(Login);
-                                finish();
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Hubo un error realizando su registro", Toast.LENGTH_LONG).show();
-                            }
-                        }
-
                     Intent ContinuarRegistro = new Intent(RegistroActivity.this, ContinuarRegistroActivity.class);
                     ContinuarRegistro.putExtra("correo", correoInputLayot.getEditText().getText().toString());
                     ContinuarRegistro.putExtra("username", usernameInputLayot.getEditText().getText().toString());
