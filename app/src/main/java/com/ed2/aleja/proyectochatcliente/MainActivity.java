@@ -24,6 +24,7 @@ import android.widget.ViewSwitcher;
 
 import com.ed2.aleja.objetos.Usuario;
 import com.ed2.aleja.utilidades.IHttpRequests;
+import com.ed2.aleja.utilidades.JwtUtility;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -62,6 +63,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final JwtUtility jwtUtility = new JwtUtility();
+        final String token = jwtUtility.retornarToken(getApplicationContext());
+        if (token != ""){
+            Intent principal = new Intent(getApplicationContext(), PrincipalActivity.class);
+            startActivity(principal);
+            finish();
+        }
 
         Intent Argumentos = getIntent();
         boolean recienRegistrado = false;
@@ -170,6 +179,9 @@ public class MainActivity extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                                             break;
                                         case "200":
+                                            String tokenObtenido = objeto.get("token").toString();
+                                            tokenObtenido = tokenObtenido.substring(1, tokenObtenido.length() - 1);
+                                            jwtUtility.escribirToken(tokenObtenido, getApplicationContext());
                                             Intent PaginaPrincipal = new Intent(getApplicationContext(), PrincipalActivity.class);
                                             startActivity(PaginaPrincipal);
                                             finish();
