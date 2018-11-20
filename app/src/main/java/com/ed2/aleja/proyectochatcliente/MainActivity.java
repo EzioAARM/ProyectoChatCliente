@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         final JwtUtility jwtUtility = new JwtUtility();
         final String token = jwtUtility.retornarToken(getApplicationContext());
-        if (token != ""){
+        if (!token.equals("") && token.length() > 10){
             Intent principal = new Intent(getApplicationContext(), PrincipalActivity.class);
             startActivity(principal);
             finish();

@@ -1,5 +1,6 @@
 package com.ed2.aleja.proyectochatcliente;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -7,7 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
+
+import com.ed2.aleja.utilidades.JwtUtility;
 
 public class PrincipalActivity extends AppCompatActivity {
 
@@ -20,6 +24,7 @@ public class PrincipalActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar_navigation_principal_activity);
         toolbar.setTitle("Conversaciones");
         setSupportActionBar(toolbar);
+        toolbar.inflateMenu(R.menu.menu_toolbar_principal);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation_bar_principal_activity);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -50,4 +55,25 @@ public class PrincipalActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar_principal, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.cerrar_sesion_principal_toolbar:
+                JwtUtility jwtUtility = new JwtUtility();
+                jwtUtility.escribirToken("", getApplicationContext());
+                Intent Login = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(Login);
+                finish();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
 }

@@ -31,6 +31,8 @@ public class JwtUtility {
 
             String texto = fin.readLine();
             fin.close();
+            if (texto == null)
+                texto = "";
             return texto;
         } catch (Exception ex) {
             ex.printStackTrace();
