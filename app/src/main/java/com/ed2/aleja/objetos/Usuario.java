@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class Usuario {
 
-    @SerializedName("username")
+    @SerializedName("user")
     public String Username;
 
     @SerializedName("password")

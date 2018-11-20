@@ -22,8 +22,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.ed2.aleja.utilidades.IHttpRequests;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,10 +51,23 @@ public class MainActivity extends AppCompatActivity {
     EditText usernameLogin;
     EditText passwordLogin;
 
+    String usuarioRecibido;
+    String passwordRecibida;
+
+    String baseURL = "http://ec2-18-220-77-115.us-east-2.compute.amazonaws.com:3000/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent Argumentos = getIntent();
+        boolean recienRegistrado = false;
+        if (Argumentos.hasExtra("username_registrado") && Argumentos.hasExtra("password_registrado")) {
+            recienRegistrado = true;
+            usuarioRecibido = Argumentos.getStringExtra("username_registrado");
+            passwordRecibida = Argumentos.getStringExtra("password_registrado");
+        }
 
         /*
         Pedir permisos de acceso a internet
@@ -97,14 +123,64 @@ public class MainActivity extends AppCompatActivity {
         passwordInputLayout = (TextInputLayout) findViewById(R.id.inputPassword_login);
         usernameLogin = (EditText) findViewById(R.id.username_login);
         passwordLogin = (EditText) findViewById(R.id.password_login);
+        if (recienRegistrado) {
+            usernameLogin.setText(usuarioRecibido);
+            passwordLogin.setText(passwordRecibida);
+        }
 
         Button logear = findViewById(R.id.logear);
         logear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent PaginaPrincipal = new Intent(getApplicationContext(), PrincipalActivity.class);
-                startActivity(PaginaPrincipal);
-                finish();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(baseURL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                IHttpRequests registrarRecurso = retrofit.create(IHttpRequests.class);
+                String usernameLogear = usernameLogin.getText().toString();
+                String passwordLogear = passwordLogin.getText().toString();
+                Call<ResponseBody> llamada = registrarRecurso.logearUsuario(usernameLogear, passwordLogear);
+                llamada.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            try {
+                                String res = response.body().string();
+                                JsonParser parser = new JsonParser();
+                                JsonObject objeto = (JsonObject) parser.parse(res);
+                                JsonElement message = null;
+                                String status = objeto.get("status").toString();
+                                switch (status) {
+                                    case "404":
+                                        message = objeto.get("message");
+                                        Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                                        break;
+                                    case "502":
+                                        message = objeto.get("message");
+                                        Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                                        break;
+                                    case "200":
+                                        Intent PaginaPrincipal = new Intent(getApplicationContext(), PrincipalActivity.class);
+                                        startActivity(PaginaPrincipal);
+                                        finish();
+                                        break;
+                                    default:
+                                        Toast.makeText(getApplicationContext(), "Se produjo un error desconocido", Toast.LENGTH_LONG).show();
+                                        break;
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Hubo un error realizando su registro", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
             }
         });
 

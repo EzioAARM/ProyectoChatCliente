@@ -14,6 +14,10 @@ public interface IHttpRequests {
     @POST("users/registrar")
     Call<ResponseBody> registrarUser(@Body Usuario user);
 
+    @GET("users/login/{user}/{password}")
+    Call<ResponseBody> logearUsuario(@Path("user") String user,
+    @Path("password") String password);
+
     @GET("users/buscarExacto/{user}")
     Call<ResponseBody> buscarExacto(@Path("user") String user);
 

@@ -15,6 +15,13 @@ import android.widget.Toast;
 
 import com.ed2.aleja.objetos.Usuario;
 import com.ed2.aleja.utilidades.IHttpRequests;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -99,7 +106,6 @@ public class ContinuarRegistroActivity extends AppCompatActivity {
                         nuevoUusario.setImagen("");
                         nuevoUusario.setTelefono(telefono.getText().toString());
                         nuevoUusario.setUsername(usernameRecibido);
-
                         Retrofit retrofit = new Retrofit.Builder()
                                 .baseUrl(baseURL)
                                 .addConverterFactory(GsonConverterFactory.create())
@@ -110,13 +116,40 @@ public class ContinuarRegistroActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 if (response.isSuccessful()){
-                                    Toast.makeText(getApplicationContext(), response.body().toString(), Toast.LENGTH_LONG).show();
-                                    /*if (response.body().equals("")) {
-                                        Toast.makeText(getApplicationContext(), "Se registró con éxito", Toast.LENGTH_LONG).show();
-                                        Intent Login = new Intent(getApplicationContext(), MainActivity.class);
-                                        startActivity(Login);
-                                        finish();
-                                    }*/
+                                    try {
+                                        String res = response.body().string();
+                                        JsonParser parser = new JsonParser();
+                                        JsonObject objeto = (JsonObject) parser.parse(res);
+                                        JsonElement message = null;
+                                        String status = objeto.get("status").toString();
+                                        switch (status) {
+                                            case "409":
+                                                message = objeto.get("message");
+                                                Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                                                Intent Registrarse = new Intent(getApplicationContext(), RegistroActivity.class);
+                                                startActivity(Registrarse);
+                                                finish();
+                                                break;
+                                            case "502":
+                                                message = objeto.get("message");
+                                                Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                                                break;
+                                            case "201":
+                                                message = objeto.get("message");
+                                                Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                                                Intent Login = new Intent(getApplicationContext(), MainActivity.class);
+                                                Login.putExtra("username_registrado", usernameRecibido);
+                                                Login.putExtra("password_registrado", passwordRecibida);
+                                                startActivity(Login);
+                                                finish();
+                                                break;
+                                            default:
+                                                Toast.makeText(getApplicationContext(), "Se produjo un error desconocido", Toast.LENGTH_LONG).show();
+                                                break;
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Hubo un error realizando su registro", Toast.LENGTH_LONG).show();
                                 }
