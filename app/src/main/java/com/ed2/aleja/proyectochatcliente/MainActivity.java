@@ -143,71 +143,73 @@ public class MainActivity extends AppCompatActivity {
         logear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(baseURL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-                    IHttpRequests registrarRecurso = retrofit.create(IHttpRequests.class);
-                    final Usuario userLogin = new Usuario();
-                    userLogin.setUsername(usernameLogin.getText().toString());
-                    userLogin.setPassword(passwordLogin.getText().toString());
-                    Call<ResponseBody> llamada = registrarRecurso.logearUsuario(userLogin.getUsername(), userLogin.getPassword());
-                    llamada.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            if (response.isSuccessful()) {
-                                try {
-                                    String res = response.body().string();
-                                    JsonParser parser = new JsonParser();
-                                    JsonObject objeto = (JsonObject) parser.parse(res);
-                                    JsonElement message = null;
-                                    String status = objeto.get("status").toString();
-                                    switch (status) {
-                                        case "404":
-                                            message = objeto.get("message");
-                                            passwordInputLayout.setErrorEnabled(true);
-                                            passwordInputLayout.setError("Verifique la contraseña");
-                                            usernameInputLayout.setErrorEnabled(true);
-                                            usernameInputLayout.setError("Verifique el nombre de usuario");
-                                            usernameLogin.setText("");
-                                            passwordLogin.setText("");
-                                            Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
-                                            break;
-                                        case "502":
-                                            message = objeto.get("message");
-                                            Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
-                                            break;
-                                        case "200":
-                                            String tokenObtenido = objeto.get("token").toString();
-                                            tokenObtenido = tokenObtenido.substring(1, tokenObtenido.length() - 1);
-                                            jwtUtility.escribirToken(tokenObtenido, getApplicationContext());
-                                            Intent PaginaPrincipal = new Intent(getApplicationContext(), PrincipalActivity.class);
-                                            startActivity(PaginaPrincipal);
-                                            finish();
-                                            break;
-                                        default:
-                                            Toast.makeText(getApplicationContext(), "Se produjo un error desconocido", Toast.LENGTH_LONG).show();
-                                            break;
+                if (verificarDatos()) {
+                    try {
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl(baseURL)
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+                        IHttpRequests registrarRecurso = retrofit.create(IHttpRequests.class);
+                        final Usuario userLogin = new Usuario();
+                        userLogin.setUsername(usernameLogin.getText().toString());
+                        userLogin.setPassword(passwordLogin.getText().toString());
+                        Call<ResponseBody> llamada = registrarRecurso.logearUsuario(userLogin.getUsername(), userLogin.getPassword());
+                        llamada.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    try {
+                                        String res = response.body().string();
+                                        JsonParser parser = new JsonParser();
+                                        JsonObject objeto = (JsonObject) parser.parse(res);
+                                        JsonElement message = null;
+                                        String status = objeto.get("status").toString();
+                                        switch (status) {
+                                            case "404":
+                                                message = objeto.get("message");
+                                                passwordInputLayout.setErrorEnabled(true);
+                                                passwordInputLayout.setError("Verifique la contraseña");
+                                                usernameInputLayout.setErrorEnabled(true);
+                                                usernameInputLayout.setError("Verifique el nombre de usuario");
+                                                usernameLogin.setText("");
+                                                passwordLogin.setText("");
+                                                Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                                                break;
+                                            case "502":
+                                                message = objeto.get("message");
+                                                Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                                                break;
+                                            case "200":
+                                                String tokenObtenido = objeto.get("token").toString();
+                                                tokenObtenido = tokenObtenido.substring(1, tokenObtenido.length() - 1);
+                                                jwtUtility.escribirToken(tokenObtenido, getApplicationContext());
+                                                jwtUtility.escribirUsername(usernameLogin.getText().toString(), getApplicationContext());
+                                                Intent PaginaPrincipal = new Intent(getApplicationContext(), PrincipalActivity.class);
+                                                startActivity(PaginaPrincipal);
+                                                finish();
+                                                break;
+                                            default:
+                                                Toast.makeText(getApplicationContext(), "Se produjo un error desconocido", Toast.LENGTH_LONG).show();
+                                                break;
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Hubo un error realizando su registro", Toast.LENGTH_LONG).show();
                                 }
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Hubo un error realizando su registro", Toast.LENGTH_LONG).show();
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                        }
-                    });
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Hubo un error cifrando su contraseña", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Hubo un error cifrando su contraseña", Toast.LENGTH_LONG).show();
+                    }
                 }
-
             }
         });
 
@@ -271,7 +273,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean verificarDatos() {
-        return (verificarPassword() && verificarUsername());
+        boolean vP = verificarPassword();
+        boolean vU = verificarUsername();
+        return (vP && vU);
     }
 
     private boolean verificarPassword() {

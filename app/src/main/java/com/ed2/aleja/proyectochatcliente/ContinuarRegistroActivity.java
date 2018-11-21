@@ -184,7 +184,10 @@ public class ContinuarRegistroActivity extends AppCompatActivity {
      */
 
     private boolean verificarCampos() {
-        return (verificarNombre() && verificarApellido() && verificarTelefono());
+        boolean vN = verificarNombre();
+        boolean vA = verificarApellido();
+        boolean vT = verificarTelefono();
+        return (vN && vA && vT);
     }
 
     private boolean verificarNombre() {

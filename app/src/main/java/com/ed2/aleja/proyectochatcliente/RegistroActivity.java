@@ -154,7 +154,11 @@ public class RegistroActivity extends AppCompatActivity {
      */
 
     private boolean validarCampos() {
-        return (verificarContraseña() && verificarContraseñasCoinciden() && verificarCorreo()&& verificarUsername());
+        boolean vC = verificarContraseña();
+        boolean vCC = verificarContraseñasCoinciden();
+        boolean vCo = verificarCorreo();
+        boolean vU = verificarUsername();
+        return (vC && vCC && vCo && vU);
     }
 
     private boolean verificarCorreo() {

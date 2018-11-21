@@ -21,6 +21,19 @@ public class JwtUtility {
         }
     }
 
+    public void escribirUsername(String username, Context contexto) {
+        try {
+            OutputStreamWriter fout=
+                    new OutputStreamWriter(
+                            contexto.openFileOutput("user.txt", Context.MODE_PRIVATE));
+
+            fout.write(username);
+            fout.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public String retornarToken(Context contexto) {
         try
         {
@@ -28,6 +41,25 @@ public class JwtUtility {
                     new BufferedReader(
                             new InputStreamReader(
                                     contexto.openFileInput("auth.txt")));
+
+            String texto = fin.readLine();
+            fin.close();
+            if (texto == null)
+                texto = "";
+            return texto;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return "";
+        }
+    }
+
+    public String retornarUsername(Context contexto) {
+        try
+        {
+            BufferedReader fin =
+                    new BufferedReader(
+                            new InputStreamReader(
+                                    contexto.openFileInput("user.txt")));
 
             String texto = fin.readLine();
             fin.close();

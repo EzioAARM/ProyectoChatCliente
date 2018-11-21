@@ -26,6 +26,10 @@ public class PrincipalActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_toolbar_principal);
 
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.contenedor_principal_principal_activity, new ConversationsFragment());
+        transaction.commit();
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation_bar_principal_activity);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -67,6 +71,7 @@ public class PrincipalActivity extends AppCompatActivity {
             case R.id.cerrar_sesion_principal_toolbar:
                 JwtUtility jwtUtility = new JwtUtility();
                 jwtUtility.escribirToken("", getApplicationContext());
+                jwtUtility.escribirUsername("", getApplicationContext());
                 Intent Login = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(Login);
                 finish();
