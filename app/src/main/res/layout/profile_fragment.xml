@@ -3,6 +3,160 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ProfileFragment">
+    tools:context=".ProfileFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/profile_picture_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark">
+
+                <ImageView
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="15dp"
+                    android:id="@+id/profile_picture_profile"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:layout_alignParentTop="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"
+                android:layout_below="@+id/profile_picture_container"
+                android:id="@+id/contenedor_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/campo_username_profile"
+                    android:paddingTop="15dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="15dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/username_profile"
+                        android:hint="Nombre de usuario"
+                        android:ems="10"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/campo_nombre_profile"
+                    android:layout_width="fill_parent"
+                    android:paddingTop="15dp"
+                    android:layout_below="@+id/campo_username_profile"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="15dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/nombre_profile"
+                        android:hint="Nombre"
+                        android:ems="10"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/campo_apellido_profile"
+                    android:layout_width="fill_parent"
+                    android:paddingTop="15dp"
+                    android:layout_below="@+id/campo_nombre_profile"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="15dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/apellido_profile"
+                        android:hint="Apellido"
+                        android:ems="10"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/campo_fechaNacimiento_profile"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:layout_below="@+id/campo_apellido_profile"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="15dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/fechaNacimiento_profile"
+                        android:hint="Fecha de nacimiento"
+                        android:ems="10"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/campo_correo_profile"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:layout_below="@+id/campo_fechaNacimiento_profile"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="15dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/correo_profile"
+                        android:hint="Correo"
+                        android:ems="10"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/campo_telefono_profile"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:layout_marginBottom="50dp"
+                    android:layout_below="@+id/campo_correo_profile"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="15dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/telefono_profile"
+                        android:hint="Teléfono"
+                        android:ems="10"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:imeOptions="actionDone"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

@@ -13,4 +13,5 @@
     <color name="colorHint">#84817a</color>
     <color name="colorAccentTextInputLayout">#227093</color>
     <color name="colorAccentErrorTextInputLayout">#ff5252</color>
+    <color name="colorSemiTransparent">#b3474787</color>
 </resources>
