@@ -1,6 +1,5 @@
 package com.ed2.aleja.proyectochatcliente;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,15 +8,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.ed2.aleja.utilidades.JwtUtility;
+import com.ed2.aleja.utilidades.Utilidades;
 import com.google.gson.JsonArray;
 
-import org.w3c.dom.Text;
-
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ConversationsFragment extends Fragment {
@@ -25,10 +20,6 @@ public class ConversationsFragment extends Fragment {
     View rootView;
     String UsuarioActual;
     String tokenActual;
-    String baseURL = "http://ec2-18-220-77-115.us-east-2.compute.amazonaws.com:3000/";
-
-    String emisor = "", _id = "", nuevos = "", imagenURL = "";
-    ArrayList<ConversationListViewItem> conversaciones = null;
 
     FloatingActionButton nuevoChat;
     FloatingActionButton nuevoGrupo;
@@ -52,9 +43,12 @@ public class ConversationsFragment extends Fragment {
                 }
             }
         });
-        JwtUtility jwtUtility = new JwtUtility();
-        UsuarioActual = jwtUtility.retornarUsername(rootView.getContext());
-        tokenActual = jwtUtility.retornarToken(rootView.getContext());
+        try {
+            UsuarioActual = Utilidades.retornarUsername(rootView.getContext());
+            tokenActual = Utilidades.retornarToken(rootView.getContext());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return rootView;
     }

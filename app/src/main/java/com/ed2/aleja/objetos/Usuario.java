@@ -1,20 +1,19 @@
 package com.ed2.aleja.objetos;
 
-import android.media.Image;
-
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 public class Usuario {
 
-    @SerializedName("user")
+    @SerializedName("_id")
+    public String id;
+
+    @SerializedName("token")
+    String Token;
+
+    @SerializedName("username")
     public String Username;
 
     @SerializedName("password")
@@ -40,6 +39,30 @@ public class Usuario {
 
     @SerializedName("imagen")
     public String Imagen;
+
+    public Usuario() {
+
+    }
+
+    public Usuario(String username, String password, String nombre, String apellido, String telefono, String fechaNacimiento, String correo, boolean status, String imagen) {
+        Username = username;
+        Password = password;
+        Nombre = nombre;
+        Apellido = apellido;
+        Telefono = telefono;
+        FechaNacimiento = fechaNacimiento;
+        Correo = correo;
+        Status = status;
+        Imagen = imagen;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public void setUsername(String username) {
         Username = username;
@@ -89,17 +112,8 @@ public class Usuario {
         return Telefono;
     }
 
-    public void setPassword(String password) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-        StringBuffer hexString = new StringBuffer();
-
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) hexString.append('0');
-            hexString.append(hex);
-        }
-        Password = hexString.toString();
+    public void setPassword(String password) {
+        Password = password;
     }
 
     public String getPassword() {

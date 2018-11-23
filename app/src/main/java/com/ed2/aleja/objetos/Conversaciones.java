@@ -16,8 +16,63 @@ public class Conversaciones {
     @SerializedName("esGrupo")
     boolean esGrupo;
 
+    @SerializedName("fotoUser1")
+    String fotoUser1;
+
+    @SerializedName("fotoUser2")
+    String fotoUser2;
+
+    @SerializedName("eliminoUser1")
+    boolean eliminoUser1;
+
+    @SerializedName("eliminoUser2")
+    boolean eliminoUser2;
+
     @SerializedName("nuevos")
     int mensajesNuevos;
+
+    @SerializedName("ultimoMensaje")
+    String ultimoMensaje;
+
+    public boolean isEliminoUser1() {
+        return eliminoUser1;
+    }
+
+    public void setEliminoUser1(boolean eliminoUser1) {
+        this.eliminoUser1 = eliminoUser1;
+    }
+
+    public boolean isEliminoUser2() {
+        return eliminoUser2;
+    }
+
+    public void setFotoUser1(String fotoUser1) {
+        this.fotoUser1 = fotoUser1;
+    }
+
+    public void setEliminoUser2(boolean eliminoUser2) {
+        this.eliminoUser2 = eliminoUser2;
+    }
+
+    public String getFotoUser1() {
+        return fotoUser1;
+    }
+
+    public String getFotoUser2() {
+        return fotoUser2;
+    }
+
+    public String getUltimoMensaje() {
+        return ultimoMensaje;
+    }
+
+    public void setFotoUser2(String fotoUser2) {
+        this.fotoUser2 = fotoUser2;
+    }
+
+    public void setUltimoMensaje(String ultimoMensaje) {
+        this.ultimoMensaje = ultimoMensaje;
+    }
 
     public int getMensajesNuevos() {
         return mensajesNuevos;

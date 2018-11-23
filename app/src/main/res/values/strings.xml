@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Chat</string>
+    <string name="error_502">Error del servidor</string>
+    <string name="error_xxx">Error desconocido</string>
+    <string name="error_404_users">El usuario no existe</string>
+    <string name="error_conexion">Verifique su conexión a internet</string>
 </resources>

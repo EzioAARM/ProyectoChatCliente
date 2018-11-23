@@ -17,17 +17,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import com.ed2.aleja.objetos.Usuario;
+import com.ed2.aleja.objetos.Token;
 import com.ed2.aleja.utilidades.IHttpRequests;
-import com.ed2.aleja.utilidades.JwtUtility;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.ed2.aleja.utilidades.Utilidades;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -35,6 +31,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import okhttp3.ResponseBody;
+import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,21 +54,24 @@ public class MainActivity extends AppCompatActivity {
     String usuarioRecibido;
     String passwordRecibida;
 
-    String baseURL = "http://ec2-18-220-77-115.us-east-2.compute.amazonaws.com:3000/";
+    IHttpRequests Peticiones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final JwtUtility jwtUtility = new JwtUtility();
-        final String token = jwtUtility.retornarToken(getApplicationContext());
-        if (!token.equals("") && token.length() > 10){
-            Intent principal = new Intent(getApplicationContext(), PrincipalActivity.class);
-            startActivity(principal);
-            finish();
+        String token = null;
+        try {
+            token = Utilidades.retornarToken(getApplicationContext());
+            if (!token.equals("") && token.length() > 10){
+                Intent principal = new Intent(getApplicationContext(), PrincipalActivity.class);
+                startActivity(principal);
+                finish();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
         Intent Argumentos = getIntent();
         boolean recienRegistrado = false;
         if (Argumentos.hasExtra("username_registrado") && Argumentos.hasExtra("password_registrado")) {
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         Pedir permisos de acceso a internet
          */
 
-        int respuesta = 0;
+        final int respuesta = 0;
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.INTERNET}, respuesta);
         }
@@ -143,72 +143,47 @@ public class MainActivity extends AppCompatActivity {
         logear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (verificarDatos()) {
+                if (verificarDatos() && Utilidades.verificarConexion(getApplicationContext())) {
                     try {
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(baseURL)
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-                        IHttpRequests registrarRecurso = retrofit.create(IHttpRequests.class);
-                        final Usuario userLogin = new Usuario();
-                        userLogin.setUsername(usernameLogin.getText().toString());
-                        userLogin.setPassword(passwordLogin.getText().toString());
-                        Call<ResponseBody> llamada = registrarRecurso.logearUsuario(userLogin.getUsername(), userLogin.getPassword());
-                        llamada.enqueue(new Callback<ResponseBody>() {
+                        String username = usernameLogin.getText().toString();
+                        String password = passwordLogin.getText().toString();
+                        Peticiones = Utilidades.RetrofitClient.create(IHttpRequests.class);
+                        Call<Token> Llamada = Peticiones.LogearUsuario(username, Utilidades.CifrarSHA256(password));
+                        Llamada.enqueue(new Callback<Token>() {
                             @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                if (response.isSuccessful()) {
-                                    try {
-                                        String res = response.body().string();
-                                        JsonParser parser = new JsonParser();
-                                        JsonObject objeto = (JsonObject) parser.parse(res);
-                                        JsonElement message = null;
-                                        String status = objeto.get("status").toString();
-                                        switch (status) {
-                                            case "404":
-                                                message = objeto.get("message");
-                                                passwordInputLayout.setErrorEnabled(true);
-                                                passwordInputLayout.setError("Verifique la contraseña");
-                                                usernameInputLayout.setErrorEnabled(true);
-                                                usernameInputLayout.setError("Verifique el nombre de usuario");
-                                                usernameLogin.setText("");
-                                                passwordLogin.setText("");
-                                                Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
-                                                break;
-                                            case "502":
-                                                message = objeto.get("message");
-                                                Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
-                                                break;
-                                            case "200":
-                                                String tokenObtenido = objeto.get("token").toString();
-                                                tokenObtenido = tokenObtenido.substring(1, tokenObtenido.length() - 1);
-                                                jwtUtility.escribirToken(tokenObtenido, getApplicationContext());
-                                                jwtUtility.escribirUsername(usernameLogin.getText().toString(), getApplicationContext());
-                                                Intent PaginaPrincipal = new Intent(getApplicationContext(), PrincipalActivity.class);
-                                                startActivity(PaginaPrincipal);
-                                                finish();
-                                                break;
-                                            default:
-                                                Toast.makeText(getApplicationContext(), "Se produjo un error desconocido", Toast.LENGTH_LONG).show();
-                                                break;
+                            public void onResponse(Call<Token> call, Response<Token> response) {
+                                switch (response.code()) {
+                                    case 202:
+                                        try {
+                                            Utilidades.escribirToken(response.body().token, getApplicationContext());
+                                            Utilidades.escribirUsername(usernameLogin.getText().toString(), getApplicationContext());
+                                            Intent Principal = new Intent(MainActivity.this, PrincipalActivity.class);
+                                            startActivity(Principal);
+                                            finish();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
                                         }
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Hubo un error realizando su registro", Toast.LENGTH_LONG).show();
+                                        break;
+                                    case 502:
+                                        onFailure(call, new Exception(getString(R.string.error_502)));
+                                        break;
+                                    default:
+                                        onFailure(call, new Exception(getString(R.string.error_xxx)));
+                                        break;
                                 }
                             }
 
                             @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                            public void onFailure(Call<Token> call, Throwable t) {
+                                t.printStackTrace();
+                                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Hubo un error cifrando su contraseña", Toast.LENGTH_LONG).show();
                     }
+                } else if (!Utilidades.verificarConexion(getApplicationContext())) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.error_conexion), Toast.LENGTH_SHORT).show();
                 }
             }
         });
