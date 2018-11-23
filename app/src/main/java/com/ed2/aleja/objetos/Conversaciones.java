@@ -7,6 +7,9 @@ public class Conversaciones {
     @SerializedName("_id")
     public String _id;
 
+    @SerializedName("token")
+    String Token;
+
     @SerializedName("user1")
     String UsuarioEmisor;
 
@@ -33,6 +36,31 @@ public class Conversaciones {
 
     @SerializedName("ultimoMensaje")
     String ultimoMensaje;
+
+    public Conversaciones(String usuarioEmisor, String usuarioReceptor, boolean esGrupo, String fotoUser1, String fotoUser2,
+                          boolean eliminoUser1, boolean eliminoUser2, int mensajesNuevos, String ultimoMensaje) {
+        UsuarioEmisor = usuarioEmisor;
+        UsuarioReceptor = usuarioReceptor;
+        this.esGrupo = esGrupo;
+        this.fotoUser1 = fotoUser1;
+        this.fotoUser2 = fotoUser2;
+        this.eliminoUser1 = eliminoUser1;
+        this.eliminoUser2 = eliminoUser2;
+        this.mensajesNuevos = mensajesNuevos;
+        this.ultimoMensaje = ultimoMensaje;
+    }
+
+    public Conversaciones() {
+
+    }
+
+    public String getToken() {
+        return Token;
+    }
+
+    public void setToken(String token) {
+        Token = token;
+    }
 
     public boolean isEliminoUser1() {
         return eliminoUser1;

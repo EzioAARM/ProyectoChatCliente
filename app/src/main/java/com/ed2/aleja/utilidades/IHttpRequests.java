@@ -31,6 +31,10 @@ public interface IHttpRequests {
     Call<Usuario> ObtenerUsuario(@Header("Authorization") String token,
                                             @Path("username") String username);
 
+    @GET("users/all/{username}")
+    Call<ArrayList<Usuario>> ObtenerTodosUsuarios(@Header("Authorization") String token,
+                                 @Path("username") String username);
+
     @POST("users/registrar")
     Call<ResponseBody> RegistrarUsuario(@Body Usuario user);
 

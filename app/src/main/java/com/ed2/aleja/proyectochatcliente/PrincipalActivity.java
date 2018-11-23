@@ -66,8 +66,6 @@ public class PrincipalActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
     }
 
     @Override

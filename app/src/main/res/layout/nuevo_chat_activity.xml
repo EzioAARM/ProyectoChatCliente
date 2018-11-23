@@ -1,51 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ConversationsFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ContactsListActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_navigation_crear_chat"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        app:titleTextAppearance="@style/AppTheme.H6"
+        app:titleTextColor="@color/colorText"
+        app:title="Crear chat"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+
+    </android.support.v7.widget.Toolbar>
 
     <ListView
-        android:id="@+id/lista_conversaciones_conversaciones"
+        android:id="@+id/contactos_nuevo_chat"
+        android:layout_below="@+id/toolbar_navigation_crear_chat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"
+        android:listSelector="@color/colorPrimary"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/crear_chat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fabSize="mini"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="30dp"
-        android:src="@drawable/ic_person_add_black_24dp" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/crear_grupo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fabSize="mini"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="30dp"
-        android:src="@drawable/ic_group_add_black_24dp" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/nuevo_conversacion"
+        android:id="@+id/iniciar_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fabSize="normal"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="21dp"
-        android:src="@drawable/ic_add_black_24dp" />
+        android:src="@drawable/ic_arrow_forward_black_24dp" />
 
     <RelativeLayout
         android:id="@+id/loadingPanel"
         android:paddingTop="15dp"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_navigation_crear_chat"
         android:gravity="center_horizontal" >
 
         <android.support.v7.widget.CardView
