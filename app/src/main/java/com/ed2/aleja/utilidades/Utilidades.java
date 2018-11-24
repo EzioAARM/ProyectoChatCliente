@@ -13,6 +13,7 @@ import java.net.ConnectException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -89,4 +90,35 @@ public class Utilidades {
         return texto;
     }
 
+    public static int GenerarNumeroPassword() {
+        Random r = new Random();
+        return r.nextInt(1023);
+
+    }
+
+    public static String EncodeMessage(String message, int key) throws Exception {
+        // Generar clave
+        String numeroString = Integer.toString(key);
+        int numeroSumado = 0;
+        for (int i = 0; i < numeroString.length(); i++) {
+            numeroSumado += Integer.parseInt(String.valueOf(numeroString.charAt(i)));
+        }
+        String numeroFinal = String.valueOf(numeroSumado);
+        // Cifrar la contraseña
+        SDES Cifrador = new SDES();
+        return Cifrador.Cifrar(message, numeroFinal);
+    }
+
+    public static String DecodeMessage(String message, int key) throws Exception {
+        // Generar clave
+        String numeroString = Integer.toString(key);
+        int numeroSumado = 0;
+        for (int i = 0; i < numeroString.length(); i++) {
+            numeroSumado += Integer.parseInt(String.valueOf(numeroString.charAt(i)));
+        }
+        String numeroFinal = String.valueOf(numeroSumado);
+        // Cifrar la contraseña
+        SDES Descifrador = new SDES();
+        return Descifrador.Descifrar(message, numeroFinal);
+    }
 }

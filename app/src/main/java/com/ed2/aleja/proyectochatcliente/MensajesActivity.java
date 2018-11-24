@@ -134,21 +134,11 @@ public class MensajesActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (!MensajeEnviar.getText().toString().equals("")) {
-                        Random r = new Random();
-                        int numero = r.nextInt();
-                        while (numero > (numero / 1023)) {
-                            numero = r.nextInt();
-                        }
-                        String numS = String.valueOf(numero);
-                        int numCif = 0;
-                        for (int i = 0; i < numS.length(); i++) {
-                            numCif += Integer.parseInt(String.valueOf(numS.charAt(i)));
-                        }
-                        SDES cifrado = new SDES();
                         try {
-                            String MensajeCifrado = cifrado.Cifrar(MensajeEnviar.getText().toString(), String.valueOf(numCif));
+                            int NumeroParaCifrar = Utilidades.GenerarNumeroPassword();
+                            String MensajeCifrado = Utilidades.EncodeMessage(MensajeEnviar.getText().toString(), NumeroParaCifrar);
                             socket.emit("EnviarMensaje", usernameReceptorChat, usernameEmisorChat, MensajeCifrado,
-                                    false, "", false, false, _id, numero);
+                                    false, "", false, false, _id, NumeroParaCifrar);
                             MensajesList.add(new MensajeListViewItem(usernameReceptorChat, MensajeEnviar.getText().toString(), false, ""));
                             Adaptador = new MensajeListViewAdapter(MensajesList, getApplicationContext());
                             Adaptador.notifyDataSetChanged();
@@ -171,16 +161,11 @@ public class MensajesActivity extends AppCompatActivity {
                                 String emisor = data.get("emisor").toString();
                                 String mensaje = data.get("mensaje").toString();
                                 String numero = data.get("numero").toString();
-                                int numDes = 0;
-                                for (int i = 0; i < numero.length(); i++) {
-                                    numDes += Integer.parseInt(String.valueOf(numero.charAt(i)));
-                                }
                                 try {
-                                    SDES Descifrar = new SDES();
-                                    String mensajeDescifrado = Descifrar.Descifrar(mensaje, String.valueOf(numDes));
+                                    String MensajeDescifrado = Utilidades.DecodeMessage(mensaje, Integer.parseInt(numero));
                                     boolean tieneArchivo = data.get("tieneArchivo").toString() == "true" ? true : false;
                                     String rutaArchivo = data.get("ubicacionArchivo").toString();
-                                    MensajesList.add(new MensajeListViewItem(emisor, mensaje, tieneArchivo, rutaArchivo));
+                                    MensajesList.add(new MensajeListViewItem(emisor, MensajeDescifrado, tieneArchivo, rutaArchivo));
                                     Adaptador = new MensajeListViewAdapter(MensajesList, getApplicationContext());
                                     Adaptador.notifyDataSetChanged();
                                     Mensajes.setAdapter(Adaptador);
@@ -202,20 +187,10 @@ public class MensajesActivity extends AppCompatActivity {
 
     private void MostrarMensajes(ArrayList<Mensaje> mensajes) {
         if (mensajes != null) {
-            String numero = "";
-            int numDes = 0;
-            String descifrado = "";
-            SDES descifrar = new SDES();
             MensajesList = new ArrayList<>();
             try {
                 for (int i = 0; i < mensajes.size(); i++) {
-                    numDes = 0;
-                    numero = String.valueOf(mensajes.get(i).getNumero());
-                    for (int j = 0; j < numero.length(); j++) {
-                        numDes += Integer.parseInt(String.valueOf(numero.charAt(j)));
-                    }
-                    descifrado = descifrar.Descifrar(mensajes.get(i).getMensaje(), String.valueOf(numDes));
-                    MensajesList.add(new MensajeListViewItem(mensajes.get(i).getEmisor(), mensajes.get(i).getMensaje(), mensajes.get(i).isTieneArchivo(), mensajes.get(i).getRutaArchivoServer()));
+                    MensajesList.add(new MensajeListViewItem(mensajes.get(i).getEmisor(), Utilidades.DecodeMessage(mensajes.get(i).getMensaje(), mensajes.get(i).getNumero()), mensajes.get(i).isTieneArchivo(), mensajes.get(i).getRutaArchivoServer()));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
