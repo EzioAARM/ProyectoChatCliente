@@ -48,11 +48,16 @@ public class MensajesActivity extends AppCompatActivity {
                 finish();
             }
         });
-        ListView listado = findViewById(R.id.mensajes_chat);
+        ListView listado = findViewById(R.id.list_mensajes_chat);
         List<Mensaje> messageList = new ArrayList<>();
+        ArrayList<MensajeListViewItem> items = new ArrayList<>();
         messageList.add(new Mensaje("Hola", "julia", "EzioA", false, "", false, false, "", ""));
         messageList.add(new Mensaje("Como estás?", "EzioA", "julia", false, "", false, false, "", ""));
-        
+        for (int i = 0; i < messageList.size(); i++) {
+            items.add(new MensajeListViewItem(messageList.get(i).getEmisor(), messageList.get(i).getMensaje()));
+        }
+        MensajeListViewAdapter adapter = new MensajeListViewAdapter(items, getApplicationContext());
+        listado.setAdapter(adapter);
     }
 
     @Override

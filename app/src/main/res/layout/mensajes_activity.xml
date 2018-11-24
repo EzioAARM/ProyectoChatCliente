@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,59 +13,64 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="Hola"
         app:titleTextAppearance="@style/AppTheme.H6"
-        app:titleTextColor="@color/colorText" />
+        app:titleTextColor="@color/colorText"
+        app:title="Hola"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+
+    </android.support.v7.widget.Toolbar>
 
     <ListView
-        android:id="@+id/mensajes_chat"
+        android:id="@+id/list_mensajes_chat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:divider="@null"
-        android:layout_below="@id/toolbar_chat">
-
-
-    </ListView>
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_chat"></ListView>
 
     <View
+        android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:layout_marginBottom="0dp"
-        android:background="#dfdfdf" />
+        android:background="#dfdfdf"
+        app:layout_constraintBottom_toTopOf="@+id/layout_chatbox"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <LinearLayout
         android:id="@+id/layout_chatbox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:orientation="horizontal"
         android:minHeight="48dp"
-        android:orientation="horizontal">
+        android:background="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
 
         <EditText
             android:id="@+id/edittext_chatbox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:hint="Enter message"
+            android:background="@android:color/transparent"
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:hint="Escribe un mensaje"
-            android:maxLines="6" />
+            android:layout_height="wrap_content"
+            android:maxLines="6"/>
 
         <Button
             android:id="@+id/button_chatbox_send"
-            android:layout_width="64dp"
-            android:layout_height="48dp"
-            android:layout_gravity="bottom"
+            android:text="SEND"
+            android:textSize="14dp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
+            android:layout_width="64dp"
+            android:layout_height="48dp"
             android:gravity="center"
-            android:text="ENVIAR"
-            android:textSize="14dp" />
+            android:layout_gravity="bottom" />
 
     </LinearLayout>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
