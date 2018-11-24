@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -44,13 +45,14 @@ public class ConversationsListViewAdapter extends BaseAdapter {
         TextView idMensaje = (TextView) convertView.findViewById(R.id.id_conversacion_conversacion);
         TextView mensajesNuevos = (TextView) convertView.findViewById(R.id.cantidad_mensajes_nuevos);
         ImageView imagen = (ImageView) convertView.findViewById(R.id.profile_image_conversation_list);
+        RelativeLayout contenedor = (RelativeLayout) convertView.findViewById(R.id.contenedor_mensajes_nuevos);
 
         ConversationListViewItem item = (ConversationListViewItem) getItem(position);
 
         if (item.getNuevos() == 0) {
-            mensajesNuevos.setVisibility(View.INVISIBLE);
+            contenedor.setVisibility(View.INVISIBLE);
         } else {
-            mensajesNuevos.setVisibility(View.VISIBLE);
+            contenedor.setVisibility(View.VISIBLE);
         }
 
         if (item.getImagen().equals("")) {
@@ -60,9 +62,9 @@ public class ConversationsListViewAdapter extends BaseAdapter {
         }
 
         mensajesNuevos.setText(String.valueOf(item.getNuevos()));
-        emisorMensaje.setText(item.getUsuarioEmisor().substring(1, item.getUsuarioEmisor().length() - 1));
-        contenidoMensaje.setText(item.getContenidoUltimoMensaje().substring(1, item.getContenidoUltimoMensaje().length() - 1));
-        idMensaje.setText(item.getIdConversacion().substring(1, item.getIdConversacion().length() - 1));
+        emisorMensaje.setText(item.getUsuarioEmisor());
+        contenidoMensaje.setText(item.getContenidoUltimoMensaje());
+        idMensaje.setText(item.getIdConversacion());
 
         return convertView;
     }

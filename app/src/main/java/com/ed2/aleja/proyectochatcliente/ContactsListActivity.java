@@ -104,6 +104,9 @@ public class ContactsListActivity extends AppCompatActivity {
                                         startActivity(MostrarConversaciones);
                                         finish();
                                         break;
+                                    case 302:
+                                        Toast.makeText(getApplicationContext(), "La conversación ya existe", Toast.LENGTH_LONG).show();
+                                        break;
                                     case 502:
                                         onFailure(call, new Exception(getString(R.string.error_502)));
                                         break;
@@ -135,7 +138,7 @@ public class ContactsListActivity extends AppCompatActivity {
     private void MostrarListado(ArrayList<Usuario> usuarios) {
         ListViewItems = new ArrayList<>();
         for (int i = 0; i < usuarios.size(); i++) {
-            if (usuarios.get(i).getUsername() != usernameActual) {
+            if (!usuarios.get(i).getUsername().equals(usernameActual)) {
                 ListViewItems.add(new ContactListViewItem(usuarios.get(i).Nombre, usuarios.get(i).Username, usuarios.get(i).getImagen()));
             }
         }

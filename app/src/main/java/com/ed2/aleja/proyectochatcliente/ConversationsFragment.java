@@ -9,9 +9,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ed2.aleja.objetos.Conversaciones;
+import com.ed2.aleja.objetos.ConversacionesToken;
 import com.ed2.aleja.objetos.Token;
 import com.ed2.aleja.utilidades.IHttpRequests;
 import com.ed2.aleja.utilidades.Utilidades;
@@ -19,7 +21,9 @@ import com.google.gson.JsonArray;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,6 +36,7 @@ public class ConversationsFragment extends Fragment {
 
     FloatingActionButton nuevoChat;
     FloatingActionButton nuevoGrupo;
+    ListView ListadoConversaciones;
     boolean isFABOpen = false;
 
     IHttpRequests Peticiones;
@@ -41,6 +46,8 @@ public class ConversationsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.conversations_fragment, container, false);
         rootView.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+
+        ListadoConversaciones = rootView.findViewById(R.id.lista_conversaciones_conversaciones);
 
         FloatingActionButton nuevaConversacion = (FloatingActionButton) rootView.findViewById(R.id.nuevo_conversacion);
         nuevoChat = (FloatingActionButton) rootView.findViewById(R.id.crear_chat);
@@ -70,8 +77,16 @@ public class ConversationsFragment extends Fragment {
             public void onResponse(Call<ArrayList<Conversaciones>> call, Response<ArrayList<Conversaciones>> response) {
                 rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 switch (response.code()) {
-                    case 201:
-
+                    case 200:
+                        try {
+                            MostrarConversaciones(response.body());
+                            Utilidades.escribirToken(response.body().get(0).getToken(), getContext());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 404:
+                        Toast.makeText(getContext(), "No hay conversaciones que mostrar", Toast.LENGTH_LONG).show();
                         break;
                     case 502:
                         onFailure(call, new Exception(getString(R.string.error_502)));
@@ -101,8 +116,25 @@ public class ConversationsFragment extends Fragment {
 
     private void MostrarConversaciones(ArrayList<Conversaciones> conversaciones) {
         ListViewItems = new ArrayList<>();
-        for (int i = 0; i < conversaciones.size()) {
-            
+        try {
+            String username = Utilidades.retornarUsername(rootView.getContext());
+            for (int i = 0; i < conversaciones.size(); i++) {
+                if (conversaciones.get(i).getUsuarioEmisor().equals(username)) {
+                    ListViewItems.add(new ConversationListViewItem(
+                            conversaciones.get(i).get_id(), conversaciones.get(i).getUsuarioReceptor(), conversaciones.get(i).getUltimoMensaje(),
+                            conversaciones.get(i).getMensajesNuevos(), ""
+                    ));
+                } else {
+                    ListViewItems.add(new ConversationListViewItem(
+                            conversaciones.get(i).get_id(), conversaciones.get(i).getUsuarioEmisor(), conversaciones.get(i).getUltimoMensaje(),
+                            conversaciones.get(i).getMensajesNuevos(), ""
+                    ));
+                }
+            }
+            ConversationsListViewAdapter Adapter = new ConversationsListViewAdapter(ListViewItems, getContext());
+            ListadoConversaciones.setAdapter(Adapter);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
