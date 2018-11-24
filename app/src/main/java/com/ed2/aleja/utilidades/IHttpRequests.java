@@ -8,14 +8,17 @@ import com.ed2.aleja.objetos.Usuario;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface IHttpRequests {
@@ -74,5 +77,11 @@ public interface IHttpRequests {
                                              @Path("id") String id);
 
     /* Terminan las peticiones de los mensajes */
+
+    /* Peticiones multipart */
+    @Multipart
+    @GET("download/{username}/{nombre}")
+    Call<ResponseBody> SubirArchivo(@Header("Authorization") String token,
+                                    @Body MultipartBody.Part file);
 
 }

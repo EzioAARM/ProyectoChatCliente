@@ -31,15 +31,23 @@
     <TextView
         android:id="@+id/mensaje_chat"
         android:text="hola a todos"
-        android:background="@drawable/send_rounded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="240dp"
-        android:padding="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="8dp"
+        android:paddingTop="12dp"
         android:textColor="@color/colorText"
         android:layout_marginTop="4dp"
+        android:clickable="true"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/send_rounded"
         app:layout_constraintTop_toBottomOf="@+id/username_chat"
         app:layout_constraintRight_toLeftOf="@+id/image_message_profile"
-        android:layout_marginLeft="8dp" />
+        android:drawableRight="@drawable/ic_file_download_black_24dp"
+        android:drawablePadding="3dp"/>
+
+
 
 </android.support.constraint.ConstraintLayout>

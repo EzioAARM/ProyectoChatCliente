@@ -61,6 +61,18 @@ public class ContactsListActivity extends AppCompatActivity {
                     case 502:
                         onFailure(call, new Exception(getString(R.string.error_502)));
                         break;
+                    case 401:
+                        Toast.makeText(getApplicationContext(), "Su sesión expiró", Toast.LENGTH_LONG).show();
+                        try {
+                            Utilidades.escribirToken("", getApplicationContext());
+                            Utilidades.escribirUsername("", getApplicationContext());
+                            Intent Login = new Intent(ContactsListActivity.this, MainActivity.class);
+                            startActivity(Login);
+                            finish();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                     default:
                         onFailure(call, new Exception("Error desconocido"));
                         break;
@@ -109,6 +121,18 @@ public class ContactsListActivity extends AppCompatActivity {
                                         break;
                                     case 502:
                                         onFailure(call, new Exception(getString(R.string.error_502)));
+                                        break;
+                                    case 401:
+                                        Toast.makeText(getApplicationContext(), "Su sesión expiró", Toast.LENGTH_LONG).show();
+                                        try {
+                                            Utilidades.escribirToken("", getApplicationContext());
+                                            Utilidades.escribirUsername("", getApplicationContext());
+                                            Intent Login = new Intent(ContactsListActivity.this, MainActivity.class);
+                                            startActivity(Login);
+                                            finish();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
                                         break;
                                     default:
                                         onFailure(call, new Exception("Error desconocido"));

@@ -82,6 +82,18 @@ public class ProfileFragment extends Fragment {
                         TelefonoEditText.setText(response.body().getTelefono());
                         getProfilePicture(response.body().getImagen());
                         break;
+                    case 401:
+                        Toast.makeText(rootView.getContext(), "Su sesión expiró", Toast.LENGTH_LONG).show();
+                        try {
+                            Utilidades.escribirToken("", rootView.getContext());
+                            Utilidades.escribirUsername("", rootView.getContext());
+                            Intent Login = new Intent(getActivity(), MainActivity.class);
+                            startActivity(Login);
+                            getActivity().finish();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                     case 502:
                         onFailure(call, new Exception(getString(R.string.error_502)));
                         break;

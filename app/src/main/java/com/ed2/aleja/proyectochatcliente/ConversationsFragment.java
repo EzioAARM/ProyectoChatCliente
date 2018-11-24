@@ -86,6 +86,18 @@ public class ConversationsFragment extends Fragment {
                             e.printStackTrace();
                         }
                         break;
+                    case 401:
+                        Toast.makeText(rootView.getContext(), "Su sesión expiró", Toast.LENGTH_LONG).show();
+                        try {
+                            Utilidades.escribirToken("", rootView.getContext());
+                            Utilidades.escribirUsername("", rootView.getContext());
+                            Intent Login = new Intent(getActivity(), MainActivity.class);
+                            startActivity(Login);
+                            getActivity().finish();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                     case 404:
                         Toast.makeText(getContext(), "No hay conversaciones que mostrar", Toast.LENGTH_LONG).show();
                         break;

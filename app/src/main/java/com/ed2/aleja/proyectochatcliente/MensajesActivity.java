@@ -96,6 +96,18 @@ public class MensajesActivity extends AppCompatActivity {
                         break;
                     case 404:
                         break;
+                    case 401:
+                        Toast.makeText(getApplicationContext(), "Su sesión expiró", Toast.LENGTH_LONG).show();
+                        try {
+                            Utilidades.escribirToken("", getApplicationContext());
+                            Utilidades.escribirUsername("", getApplicationContext());
+                            Intent Login = new Intent(MensajesActivity.this, MainActivity.class);
+                            startActivity(Login);
+                            finish();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                     case 502:
                         onFailure(call, new Exception(getString(R.string.error_502)));
                         break;
@@ -122,7 +134,7 @@ public class MensajesActivity extends AppCompatActivity {
                     if (!MensajeEnviar.getText().toString().equals("")) {
                         socket.emit("EnviarMensaje", usernameReceptorChat, usernameEmisorChat, MensajeEnviar.getText().toString(),
                                 false, "", false, false, _id);
-                        MensajesList.add(new MensajeListViewItem(usernameReceptorChat, MensajeEnviar.getText().toString()));
+                        MensajesList.add(new MensajeListViewItem(usernameReceptorChat, MensajeEnviar.getText().toString(), false, ""));
                         Adaptador = new MensajeListViewAdapter(MensajesList, getApplicationContext());
                         Adaptador.notifyDataSetChanged();
                         Mensajes.setAdapter(Adaptador);
@@ -140,7 +152,9 @@ public class MensajesActivity extends AppCompatActivity {
                                 JSONObject data = (JSONObject) args[0];
                                 String emisor = data.get("emisor").toString();
                                 String mensaje = data.get("mensaje").toString();
-                                MensajesList.add(new MensajeListViewItem(emisor, mensaje));
+                                boolean tieneArchivo = data.get("tieneArchivo").toString() == "true" ? true : false;
+                                String rutaArchivo = data.get("ubicacionArchivo").toString();
+                                MensajesList.add(new MensajeListViewItem(emisor, mensaje, tieneArchivo, rutaArchivo));
                                 Adaptador = new MensajeListViewAdapter(MensajesList, getApplicationContext());
                                 Adaptador.notifyDataSetChanged();
                                 Mensajes.setAdapter(Adaptador);
@@ -161,7 +175,7 @@ public class MensajesActivity extends AppCompatActivity {
         if (mensajes != null) {
             MensajesList = new ArrayList<>();
             for (int i = 0; i < mensajes.size(); i++) {
-                MensajesList.add(new MensajeListViewItem(mensajes.get(i).getEmisor(), mensajes.get(i).getMensaje()));
+                MensajesList.add(new MensajeListViewItem(mensajes.get(i).getEmisor(), mensajes.get(i).getMensaje(), mensajes.get(i).isTieneArchivo(), mensajes.get(i).getRutaArchivoServer()));
             }
             Adaptador = new MensajeListViewAdapter(MensajesList, getApplicationContext());
             Mensajes.setAdapter(Adaptador);

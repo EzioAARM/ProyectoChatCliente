@@ -41,15 +41,35 @@ public class MensajeListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         try {
             if (ItemsList.get(position).getUsername().equals(Utilidades.retornarUsername(Contexto))){
-                convertView = LayoutInflater.from(Contexto).inflate(R.layout.item_mensaje_enviado, null);
+                if (ItemsList.get(position).isTieneArchivo()){
+                    convertView = LayoutInflater.from(Contexto).inflate(R.layout.item_archivo_enviado, null);
+                } else {
+                    convertView = LayoutInflater.from(Contexto).inflate(R.layout.item_mensaje_enviado, null);
+                }
+
             } else {
-                convertView = LayoutInflater.from(Contexto).inflate(R.layout.item_mensaje_recibido, null);
+                if (ItemsList.get(position).isTieneArchivo()) {
+                    convertView = LayoutInflater.from(Contexto).inflate(R.layout.item_archivo_recibido, null);
+                } else {
+                    convertView = LayoutInflater.from(Contexto).inflate(R.layout.item_mensaje_recibido, null);
+                }
             }
+
             TextView TextViewMensaje = convertView.findViewById(R.id.mensaje_chat);
             TextView TextViewUsername = convertView.findViewById(R.id.username_chat);
+            if (ItemsList.get(position).isTieneArchivo()) {
+                TextViewMensaje.setText(ItemsList.get(position).getRutaArchivo().lastIndexOf('\\'));
+                TextViewUsername.setText(ItemsList.get(position).getUsername());
+                TextViewMensaje.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-            TextViewMensaje.setText(ItemsList.get(position).getMensaje());
-            TextViewUsername.setText(ItemsList.get(position).getUsername());
+                    }
+                });
+            } else {
+                TextViewMensaje.setText(ItemsList.get(position).getMensaje());
+                TextViewUsername.setText(ItemsList.get(position).getUsername());
+            }
             return convertView;
         } catch (IOException e) {
             e.printStackTrace();
