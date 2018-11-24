@@ -9,6 +9,7 @@
     <ListView
         android:id="@+id/lista_conversaciones_conversaciones"
         android:layout_width="match_parent"
+        android:divider="@null"
         android:layout_height="match_parent"></ListView>
 
     <android.support.design.widget.FloatingActionButton

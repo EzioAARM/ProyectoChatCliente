@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -100,6 +101,16 @@ public class ConversationsFragment extends Fragment {
             public void onFailure(Call<ArrayList<Conversaciones>> call, Throwable t) {
                 rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 Toast.makeText(rootView.getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ListadoConversaciones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), MensajesActivity.class);
+                intent.putExtra("emisor", ListViewItems.get(position).getUsuarioEmisor());
+                startActivity(intent);
+                getActivity().finish();
             }
         });
 
