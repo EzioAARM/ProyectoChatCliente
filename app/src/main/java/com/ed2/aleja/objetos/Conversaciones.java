@@ -37,6 +37,17 @@ public class Conversaciones {
     @SerializedName("ultimoMensaje")
     String ultimoMensaje;
 
+    @SerializedName("numero")
+    public int Numero;
+
+    public int getNumero() {
+        return Numero;
+    }
+
+    public void setNumero(int numero) {
+        Numero = numero;
+    }
+
     public String getSender() {
         return Sender;
     }

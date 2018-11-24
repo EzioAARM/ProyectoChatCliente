@@ -142,10 +142,12 @@ public class ConversationsFragment extends Fragment {
         ListViewItems = new ArrayList<>();
         try {
             String username = Utilidades.retornarUsername(rootView.getContext());
+            String lastMessage = "";
             for (int i = 0; i < conversaciones.size(); i++) {
+                lastMessage = Utilidades.DecodeMessage(conversaciones.get(i).getUltimoMensaje(), conversaciones.get(i).getNumero());
                 if (conversaciones.get(i).getUsuarioEmisor().equals(username)) {
                     ListViewItems.add(new ConversationListViewItem(
-                            conversaciones.get(i).get_id(), conversaciones.get(i).getUsuarioReceptor(), conversaciones.get(i).getUltimoMensaje(),
+                            conversaciones.get(i).get_id(), conversaciones.get(i).getUsuarioReceptor(), lastMessage,
                             conversaciones.get(i).getMensajesNuevos(), "", conversaciones.get(i).getSender()
                     ));
                 } else {
@@ -158,6 +160,8 @@ public class ConversationsFragment extends Fragment {
             ConversationsListViewAdapter Adapter = new ConversationsListViewAdapter(ListViewItems, getContext());
             ListadoConversaciones.setAdapter(Adapter);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
