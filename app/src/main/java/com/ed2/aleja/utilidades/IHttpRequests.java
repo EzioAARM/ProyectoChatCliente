@@ -67,6 +67,12 @@ public interface IHttpRequests {
     Call<ArrayList<Conversaciones>> ObtenerConversacioens(@Header("Authorization") String token,
                                                           @Path("username") String usernameActual);
 
+    @PUT("conversaciones/reiniciar/{conversacion}/{usernameEmisor}/{username}")
+    Call<Token> BorrarFlags(@Header("Authorization") String token,
+                            @Path("conversacion") String id,
+                            @Path("usernameEmisor") String emisor,
+                            @Path("username") String username);
+
     /* Terminan las peticiones de las conversaciones */
 
     /* Empiezan las peticiones de los mensajes */
@@ -75,6 +81,12 @@ public interface IHttpRequests {
     Call<ArrayList<Mensaje>> ObtenerMensajes(@Header("Authorization") String token,
                                              @Path("username") String username,
                                              @Path("id") String id);
+
+    @PUT("mensajes/leer/{conversacion}/{receptor}/{username}")
+    Call<Token> ActualizarLeidos(@Header("Authorization") String token,
+                                        @Path("conversacion") String id,
+                                        @Path("receptor") String receptor,
+                                        @Path("username") String username);
 
     /* Terminan las peticiones de los mensajes */
 

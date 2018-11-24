@@ -152,7 +152,7 @@ public class ConversationsFragment extends Fragment {
                     ));
                 } else {
                     ListViewItems.add(new ConversationListViewItem(
-                            conversaciones.get(i).get_id(), conversaciones.get(i).getUsuarioEmisor(), conversaciones.get(i).getUltimoMensaje(),
+                            conversaciones.get(i).get_id(), conversaciones.get(i).getUsuarioEmisor(), lastMessage,
                             conversaciones.get(i).getMensajesNuevos(), "", conversaciones.get(i).getSender()
                     ));
                 }

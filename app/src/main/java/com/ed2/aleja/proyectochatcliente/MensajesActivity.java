@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.ed2.aleja.objetos.Conversaciones;
 import com.ed2.aleja.objetos.Mensaje;
+import com.ed2.aleja.objetos.Token;
 import com.ed2.aleja.utilidades.IHttpRequests;
 import com.ed2.aleja.utilidades.SDES;
 import com.ed2.aleja.utilidades.Utilidades;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -87,6 +89,62 @@ public class MensajesActivity extends AppCompatActivity {
         });
 
         Peticiones = Utilidades.RetrofitClient.create(IHttpRequests.class);
+        Call<Token> MensajesLeido = Peticiones.ActualizarLeidos(tokenActual, _id, usernameEmisorChat, usernameReceptorChat);
+        MensajesLeido.enqueue(new Callback<Token>() {
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                switch(response.code()) {
+                    case 200:
+                        try {
+                            Utilidades.escribirToken(response.body().token, getApplicationContext());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 502:
+                        onFailure(call, new Exception(getString(R.string.error_502)));
+                        break;
+                    default:
+                        onFailure(call, new Exception("Error inesperado"));
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Call<Token> QuitarNumeros = Peticiones.BorrarFlags(tokenActual, _id, usernameEmisorChat, usernameReceptorChat);
+        QuitarNumeros.enqueue(new Callback<Token>() {
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                switch(response.code()) {
+                    case 200:
+                        try {
+                            Utilidades.escribirToken(response.body().token, getApplicationContext());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 502:
+                        onFailure(call, new Exception(getString(R.string.error_502)));
+                        break;
+                    default:
+                        onFailure(call, new Exception("Error inesperado"));
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         Call<ArrayList<Mensaje>> Llamada = Peticiones.ObtenerMensajes(tokenActual, usernameReceptorChat, _id);
         Llamada.enqueue(new Callback<ArrayList<Mensaje>>() {
             @Override
