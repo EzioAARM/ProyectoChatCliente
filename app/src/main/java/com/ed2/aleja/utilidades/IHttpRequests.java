@@ -1,6 +1,7 @@
 package com.ed2.aleja.utilidades;
 
 import com.ed2.aleja.objetos.Conversaciones;
+import com.ed2.aleja.objetos.Mensaje;
 import com.ed2.aleja.objetos.Token;
 import com.ed2.aleja.objetos.Usuario;
 
@@ -64,5 +65,14 @@ public interface IHttpRequests {
                                                           @Path("username") String usernameActual);
 
     /* Terminan las peticiones de las conversaciones */
+
+    /* Empiezan las peticiones de los mensajes */
+
+    @GET("mensajes/{username}/{id}")
+    Call<ArrayList<Mensaje>> ObtenerMensajes(@Header("Authorization") String token,
+                                             @Path("username") String username,
+                                             @Path("id") String id);
+
+    /* Terminan las peticiones de los mensajes */
 
 }

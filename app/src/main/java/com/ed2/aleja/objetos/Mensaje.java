@@ -37,6 +37,10 @@ public class Mensaje {
     @SerializedName("token")
     public String token;
 
+    public Mensaje() {
+
+    }
+
     public Mensaje(String mensaje, String emisor, String receptor, boolean tieneArchivo, String rutaArchivoServer, boolean leido, boolean hayGrupo, String fechaEnviado, String horaEnviado) {
         Mensaje = mensaje;
         Emisor = emisor;

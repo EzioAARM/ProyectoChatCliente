@@ -109,6 +109,7 @@ public class ConversationsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), MensajesActivity.class);
                 intent.putExtra("emisor", ListViewItems.get(position).getUsuarioEmisor());
+                intent.putExtra("id", ListViewItems.get(position).getIdConversacion());
                 startActivity(intent);
                 getActivity().finish();
             }
@@ -133,12 +134,12 @@ public class ConversationsFragment extends Fragment {
                 if (conversaciones.get(i).getUsuarioEmisor().equals(username)) {
                     ListViewItems.add(new ConversationListViewItem(
                             conversaciones.get(i).get_id(), conversaciones.get(i).getUsuarioReceptor(), conversaciones.get(i).getUltimoMensaje(),
-                            conversaciones.get(i).getMensajesNuevos(), ""
+                            conversaciones.get(i).getMensajesNuevos(), "", conversaciones.get(i).getSender()
                     ));
                 } else {
                     ListViewItems.add(new ConversationListViewItem(
                             conversaciones.get(i).get_id(), conversaciones.get(i).getUsuarioEmisor(), conversaciones.get(i).getUltimoMensaje(),
-                            conversaciones.get(i).getMensajesNuevos(), ""
+                            conversaciones.get(i).getMensajesNuevos(), "", conversaciones.get(i).getSender()
                     ));
                 }
             }

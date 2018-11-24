@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ed2.aleja.utilidades.Utilidades;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ConversationsListViewAdapter extends BaseAdapter {
@@ -52,7 +55,15 @@ public class ConversationsListViewAdapter extends BaseAdapter {
         if (item.getNuevos() == 0) {
             contenedor.setVisibility(View.INVISIBLE);
         } else {
-            contenedor.setVisibility(View.VISIBLE);
+            try {
+                if (item.getSender().equals(Utilidades.retornarUsername(Contexto))) {
+                    contenedor.setVisibility(View.INVISIBLE);
+                } else {
+                    contenedor.setVisibility(View.VISIBLE);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         if (item.getImagen().equals("")) {

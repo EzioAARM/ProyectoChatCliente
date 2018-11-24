@@ -37,6 +37,17 @@ public class Conversaciones {
     @SerializedName("ultimoMensaje")
     String ultimoMensaje;
 
+    public String getSender() {
+        return Sender;
+    }
+
+    public void setSender(String sender) {
+        Sender = sender;
+    }
+
+    @SerializedName("sender")
+    String Sender;
+
     public Conversaciones(String usuarioEmisor, String usuarioReceptor, boolean esGrupo, String fotoUser1, String fotoUser2,
                           boolean eliminoUser1, boolean eliminoUser2, int mensajesNuevos, String ultimoMensaje) {
         UsuarioEmisor = usuarioEmisor;

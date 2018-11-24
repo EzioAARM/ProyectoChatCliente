@@ -21,6 +21,7 @@ public class Utilidades {
 
     public static final String UrlServer = "http://ec2-13-59-143-40.us-east-2.compute.amazonaws.com";
     public static final String Puerto = "3000";
+    public static final String PuertoSocket = "3001";
     public static Retrofit RetrofitClient = new Retrofit
             .Builder()
             .baseUrl(Utilidades.UrlServer + ":" + Utilidades.Puerto + "/")

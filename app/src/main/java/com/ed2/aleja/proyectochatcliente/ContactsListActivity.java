@@ -139,7 +139,7 @@ public class ContactsListActivity extends AppCompatActivity {
         ListViewItems = new ArrayList<>();
         for (int i = 0; i < usuarios.size(); i++) {
             if (!usuarios.get(i).getUsername().equals(usernameActual)) {
-                ListViewItems.add(new ContactListViewItem(usuarios.get(i).Nombre, usuarios.get(i).Username, usuarios.get(i).getImagen()));
+                ListViewItems.add(new ContactListViewItem(usuarios.get(i).Username, usuarios.get(i).Nombre, usuarios.get(i).getImagen()));
             }
         }
         ContactListViewadapter Adaptador = new ContactListViewadapter(ListViewItems, getApplicationContext());
