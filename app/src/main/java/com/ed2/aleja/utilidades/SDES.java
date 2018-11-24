@@ -11,7 +11,7 @@ public class SDES {
     private String[][] sBox2 = {{"00", "01", "10", "11"}, {"10", "00", "01", "11"}, {"11", "00", "01", "00"}, {"10", "01", "00", "11"}};
     private String TextoParaCifrar, Key, TextoCifrado, TextoDescifrado;
 
-    public void Cifrar(String textCifrar, String key, String extension) throws Exception {
+    public String Cifrar(String textCifrar, String key) throws Exception {
         Key = key;
         TextoParaCifrar = textCifrar;
         /* Creación de las llaves */
@@ -72,10 +72,11 @@ public class SDES {
             binarioCifrado = convertirBoolean(PermutacionInversa(ConcatenarArreglos(c2, c1)));
             TextoCifrado += String.valueOf((char) Integer.parseInt(binarioCifrado, 2));
         }
+        return TextoCifrado;
         /* Fin del cifrado */
     }
 
-    public void Descifrar(String textCifrar, String key) throws Exception {
+    public String Descifrar(String textCifrar, String key) throws Exception {
         Key = key;
         TextoParaCifrar = textCifrar;
         String extension = "";
@@ -146,6 +147,7 @@ public class SDES {
             binarioCifrado = convertirBoolean(PermutacionInversa(ConcatenarArreglos(c2, c1)));
             TextoDescifrado += String.valueOf((char) Integer.parseInt(binarioCifrado, 2));
         }
+        return TextoDescifrado;
         /* Fin del cifrado */
     }
 

@@ -37,6 +37,9 @@ public class Mensaje {
     @SerializedName("token")
     public String token;
 
+    @SerializedName("numero")
+    public int numero;
+
     public Mensaje() {
 
     }
@@ -51,6 +54,14 @@ public class Mensaje {
         this.hayGrupo = hayGrupo;
         this.fechaEnviado = fechaEnviado;
         this.horaEnviado = horaEnviado;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 
     public String get_id() {

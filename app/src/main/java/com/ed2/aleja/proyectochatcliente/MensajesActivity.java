@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.ed2.aleja.objetos.Conversaciones;
 import com.ed2.aleja.objetos.Mensaje;
 import com.ed2.aleja.utilidades.IHttpRequests;
+import com.ed2.aleja.utilidades.SDES;
 import com.ed2.aleja.utilidades.Utilidades;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -132,13 +134,29 @@ public class MensajesActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (!MensajeEnviar.getText().toString().equals("")) {
-                        socket.emit("EnviarMensaje", usernameReceptorChat, usernameEmisorChat, MensajeEnviar.getText().toString(),
-                                false, "", false, false, _id);
-                        MensajesList.add(new MensajeListViewItem(usernameReceptorChat, MensajeEnviar.getText().toString(), false, ""));
-                        Adaptador = new MensajeListViewAdapter(MensajesList, getApplicationContext());
-                        Adaptador.notifyDataSetChanged();
-                        Mensajes.setAdapter(Adaptador);
-                        MensajeEnviar.setText("");
+                        Random r = new Random();
+                        int numero = r.nextInt();
+                        while (numero > (numero / 1023)) {
+                            numero = r.nextInt();
+                        }
+                        String numS = String.valueOf(numero);
+                        int numCif = 0;
+                        for (int i = 0; i < numS.length(); i++) {
+                            numCif += Integer.parseInt(String.valueOf(numS.charAt(i)));
+                        }
+                        SDES cifrado = new SDES();
+                        try {
+                            String MensajeCifrado = cifrado.Cifrar(MensajeEnviar.getText().toString(), String.valueOf(numCif));
+                            socket.emit("EnviarMensaje", usernameReceptorChat, usernameEmisorChat, MensajeCifrado,
+                                    false, "", false, false, _id, numero);
+                            MensajesList.add(new MensajeListViewItem(usernameReceptorChat, MensajeEnviar.getText().toString(), false, ""));
+                            Adaptador = new MensajeListViewAdapter(MensajesList, getApplicationContext());
+                            Adaptador.notifyDataSetChanged();
+                            Mensajes.setAdapter(Adaptador);
+                            MensajeEnviar.setText("");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });
@@ -152,12 +170,23 @@ public class MensajesActivity extends AppCompatActivity {
                                 JSONObject data = (JSONObject) args[0];
                                 String emisor = data.get("emisor").toString();
                                 String mensaje = data.get("mensaje").toString();
-                                boolean tieneArchivo = data.get("tieneArchivo").toString() == "true" ? true : false;
-                                String rutaArchivo = data.get("ubicacionArchivo").toString();
-                                MensajesList.add(new MensajeListViewItem(emisor, mensaje, tieneArchivo, rutaArchivo));
-                                Adaptador = new MensajeListViewAdapter(MensajesList, getApplicationContext());
-                                Adaptador.notifyDataSetChanged();
-                                Mensajes.setAdapter(Adaptador);
+                                String numero = data.get("numero").toString();
+                                int numDes = 0;
+                                for (int i = 0; i < numero.length(); i++) {
+                                    numDes += Integer.parseInt(String.valueOf(numero.charAt(i)));
+                                }
+                                try {
+                                    SDES Descifrar = new SDES();
+                                    String mensajeDescifrado = Descifrar.Descifrar(mensaje, String.valueOf(numDes));
+                                    boolean tieneArchivo = data.get("tieneArchivo").toString() == "true" ? true : false;
+                                    String rutaArchivo = data.get("ubicacionArchivo").toString();
+                                    MensajesList.add(new MensajeListViewItem(emisor, mensaje, tieneArchivo, rutaArchivo));
+                                    Adaptador = new MensajeListViewAdapter(MensajesList, getApplicationContext());
+                                    Adaptador.notifyDataSetChanged();
+                                    Mensajes.setAdapter(Adaptador);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             } catch (JSONException e) {
                                 Toast.makeText(getApplicationContext(), "Hubo un error al enviar el mensaje", Toast.LENGTH_SHORT).show();
                                 e.printStackTrace();
@@ -173,9 +202,23 @@ public class MensajesActivity extends AppCompatActivity {
 
     private void MostrarMensajes(ArrayList<Mensaje> mensajes) {
         if (mensajes != null) {
+            String numero = "";
+            int numDes = 0;
+            String descifrado = "";
+            SDES descifrar = new SDES();
             MensajesList = new ArrayList<>();
-            for (int i = 0; i < mensajes.size(); i++) {
-                MensajesList.add(new MensajeListViewItem(mensajes.get(i).getEmisor(), mensajes.get(i).getMensaje(), mensajes.get(i).isTieneArchivo(), mensajes.get(i).getRutaArchivoServer()));
+            try {
+                for (int i = 0; i < mensajes.size(); i++) {
+                    numDes = 0;
+                    numero = String.valueOf(mensajes.get(i).getNumero());
+                    for (int j = 0; j < numero.length(); j++) {
+                        numDes += Integer.parseInt(String.valueOf(numero.charAt(j)));
+                    }
+                    descifrado = descifrar.Descifrar(mensajes.get(i).getMensaje(), String.valueOf(numDes));
+                    MensajesList.add(new MensajeListViewItem(mensajes.get(i).getEmisor(), mensajes.get(i).getMensaje(), mensajes.get(i).isTieneArchivo(), mensajes.get(i).getRutaArchivoServer()));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             Adaptador = new MensajeListViewAdapter(MensajesList, getApplicationContext());
             Mensajes.setAdapter(Adaptador);

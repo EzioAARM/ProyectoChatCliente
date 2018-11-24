@@ -109,7 +109,7 @@ public class ContinuarRegistroActivity extends AppCompatActivity {
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 switch (response.code()) {
                                     case 201:
-                                        Intent Principal = new Intent(ContinuarRegistroActivity.this, PrincipalActivity.class);
+                                        Intent Principal = new Intent(ContinuarRegistroActivity.this, MainActivity.class);
                                         Principal.putExtra("username_registrado", usernameRecibido);
                                         Principal.putExtra("password_registrado", passwordRecibida);
                                         startActivity(Principal);
